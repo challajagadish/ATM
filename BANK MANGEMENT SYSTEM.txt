@@ -1,0 +1,96 @@
+import java.util.*;
+
+class Developer {
+    String name;
+    int codingLevel = 1;
+    double savings = 500.0;
+    int energy = 100;
+    String jobTitle = "Intern";
+
+    Developer(String name) {
+        this.name = name;
+    }
+
+    void study() {
+        if (energy >= 30) {
+            codingLevel += 5;
+            energy -= 30;
+            savings -= 50; // Costs for courses/books
+            System.out.println(">> Studied hard! Coding Level is now: " + codingLevel);
+        } else {
+            System.out.println(">> Too tired to study. Take a nap!");
+        }
+    }
+
+    void work() {
+        if (energy >= 20) {
+            double salary = 100 + (codingLevel * 2);
+            savings += salary;
+            energy -= 40;
+            System.out.println(">> Work complete! Earned: $" + salary);
+        } else {
+            System.out.println(">> You are burnt out! You need to rest.");
+        }
+    }
+
+    void checkPromotion() {
+        if (codingLevel >= 50 && jobTitle.equals("Intern")) {
+            jobTitle = "Junior Developer";
+            System.out.println("*** PROMOTED to Junior Developer! ***");
+        } else if (codingLevel >= 150 && jobTitle.equals("Junior Developer")) {
+            jobTitle = "Senior Architect";
+            System.out.println("*** PROMOTED to Senior Architect! ***");
+        } else {
+            System.out.println(">> Not ready for promotion yet. Keep grinding!");
+        }
+    }
+
+    void status() {
+        System.out.println("\n----- CAREER DASHBOARD -----");
+        System.out.println("Name: " + name + " | Title: " + jobTitle);
+        System.out.println("Skill: " + codingLevel + " | Energy: " + energy + "%");
+        System.out.println("Bank Balance: $" + savings);
+        System.out.println("----------------------------");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter your Name: ");
+        Developer dev = new Developer(sc.nextLine());
+
+        while (true) {
+            dev.status();
+            System.out.println("1. Work (Earn Money)");
+            System.out.println("2. Study (Level Up Skill - Costs $50)");
+            System.out.println("3. Rest (Restore Energy)");
+            System.out.println("4. Apply for Promotion");
+            System.out.println("5. Quit Career");
+            System.out.print("Action: ");
+            
+            int choice = sc.nextInt();
+
+            if (choice == 1) {
+                dev.work();
+            } else if (choice == 2) {
+                dev.study();
+            } else if (choice == 3) {
+                dev.energy = 100;
+                System.out.println(">> Slept for 8 hours. Energy restored!");
+            } else if (choice == 4) {
+                dev.checkPromotion();
+            } else if (choice == 5) {
+                System.out.println("Retiring... Final Title: " + dev.jobTitle + " | Net Worth: $" + dev.savings);
+                break;
+            }
+
+            // Lose condition: If you run out of money and energy
+            if (dev.savings < 0) {
+                System.out.println("GAME OVER: You went broke!");
+                break;
+            }
+        }
+        sc.close();
+    }
+}
